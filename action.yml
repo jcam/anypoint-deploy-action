@@ -1,0 +1,6 @@
+name: 'Anypoint Build/Deploy'
+description: 'Build and Deploy Mulesoft Anypoint applications to cloudhub or runtime fabric'
+author: 'Jesse Campbell, MMS'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
