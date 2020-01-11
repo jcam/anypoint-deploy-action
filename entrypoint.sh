@@ -25,14 +25,15 @@ ANYPOINT_ASSET_ID=$APP_NAME-$ANYPOINT_LAYER_LOWERCASE-api
 GIT_SHORTSHA=${GITHUB_SHA::8}
 
 #==========================================================
-# Use branch name for the API instance label
-# The branch name is also added to the APP name if not 
+# The branch name is added to the APP name if not 
 # the master branch.
 #
-api_instance_label=${GITHUB_REF##*/}
-api_instance_label=${api_instance_label##*-}
-if [[ $api_instance_label != "master" ]]; then
-    APP_NAME_SUFFIX=-$api_instance_label
+if [[ -z "$API_INSTANCE_LABEL" ]]; then
+    API_INSTANCE_LABEL=${GITHUB_REF##*/}
+    API_INSTANCE_LABEL=${API_INSTANCE_LABEL##*-}
+    if [[ $API_INSTANCE_LABEL != "master" ]]; then
+        APP_NAME_SUFFIX=-$API_INSTANCE_LABEL
+    fi
 fi
 ANYPOINT_APPLICATION_NAME=$GIT_REPO-$API_RELEASE$APP_NAME_SUFFIX
 ANYPOINT_APPLICATION_PATH=$APP_NAME$APP_NAME_SUFFIX/$API_RELEASE
@@ -57,7 +58,7 @@ mvn_deploy_cmd+=" -Dhost.external=api.${DOMAIN}"
 mvn_deploy_cmd+=" -Dhost.internal=api.internal.${DOMAIN}"
 mvn_deploy_cmd+=" -Danypoint.platform.config.analytics.agent.enabled=true"
 mvn_deploy_cmd+=" -Danypoint.platform.visualizer.layer=$ANYPOINT_LAYER"
-if [[ -z "$API_ID" ]]; then
+if [[ ! -z "$API_ID" ]]; then
     mvn_deploy_cmd+=" -DapiId=$API_ID"
 fi
 
