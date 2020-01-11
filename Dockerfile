@@ -1,6 +1,6 @@
-FROM zenika/alpine-maven:3-jdk8
+FROM openjdk:8-alpine
 
-RUN apk add --no-cache bash git
+RUN apk add --no-cache bash git maven
 
 COPY LICENSE README.md m2_settings.xml /
 
