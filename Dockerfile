@@ -1,4 +1,4 @@
-FROM maven:3.6-jdk-8
+FROM zenika/alpine-maven:3-jdk8
 
 COPY LICENSE README.md m2_settings.xml /
 
