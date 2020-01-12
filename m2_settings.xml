@@ -7,6 +7,8 @@
         <pluginGroup>org.mule.tools</pluginGroup>
     </pluginGroups>
 
+    <localRepository>/github/home/.m2/repository</localRepository>
+
     <servers>
         <server>
             <id>MuleRepository</id>
