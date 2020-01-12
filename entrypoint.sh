@@ -42,10 +42,10 @@ ANYPOINT_APPLICATION_PATH=$APP_NAME$APP_NAME_SUFFIX/$API_RELEASE
 # Build the JAR using Maven
 # Production should only deploy an existing, tested build
 #
-if [[ ! "$ENVIRONMENT" = "prod" ]]; then
-    mvn -B -s/m2_settings.xml exists:remote deploy -DskipTests -Drevision=$API_VERSION-R$GIT_SHORTSHA || die "Build Failed"
+if [[ "$ENVIRONMENT" = "prod" ]]; then
+    mvn -B -s/m2_settings.xml exists:remote -Dexists.failIfNotExists=true -Drevision=$API_VERSION-R$GIT_SHORTSHA || die "Build not found, deploy to QA first"
 else
-    mvn -B -s/m2_settings.xml exists:remote | grep maven.deploy.skip || die "Build not found, deploy to QA first"
+    mvn -B -s/m2_settings.xml exists:remote deploy -DskipTests -Drevision=$API_VERSION-R$GIT_SHORTSHA || die "Build Failed"
 fi
 
 #==========================================================
@@ -69,5 +69,4 @@ fi
 if [[ "$ANYPOINT_ENVIRONMENT" = "Production" ]]; then
     mvn_deploy_cmd+=" -Ddeployment.replicas=2"
 fi
-echo $mvn_deploy_cmd
 eval $mvn_deploy_cmd
