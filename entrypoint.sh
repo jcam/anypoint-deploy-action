@@ -40,9 +40,11 @@ ANYPOINT_APPLICATION_PATH=$APP_NAME$APP_NAME_SUFFIX/$API_RELEASE
 
 #==========================================================
 # Build the JAR using Maven
+# Production should only deploy an existing, tested build
 #
-mvn -B -s/m2_settings.xml package -DskipTests -Drevision=$API_VERSION-R$GIT_SHORTSHA
-mvn -B -s/m2_settings.xml deploy -DskipTests -Drevision=$API_VERSION-R$GIT_SHORTSHA || echo Upload Failed
+if [[ ! "$ENVIRONMENT" = "prod" ]]; then
+    mvn -B -s/m2_settings.xml deploy -DskipTests -Drevision=$API_VERSION-R$GIT_SHORTSHA || die "Build Failed"
+fi
 
 #==========================================================
 # Deploy to runtime fabric
