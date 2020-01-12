@@ -43,7 +43,9 @@ ANYPOINT_APPLICATION_PATH=$APP_NAME$APP_NAME_SUFFIX/$API_RELEASE
 # Production should only deploy an existing, tested build
 #
 if [[ ! "$ENVIRONMENT" = "prod" ]]; then
-    mvn -B -s/m2_settings.xml deploy -DskipTests -Drevision=$API_VERSION-R$GIT_SHORTSHA || die "Build Failed"
+    mvn -B -s/m2_settings.xml exists:remote deploy -DskipTests -Drevision=$API_VERSION-R$GIT_SHORTSHA || die "Build Failed"
+else
+    mvn -B -s/m2_settings.xml exists:remote | grep maven.deploy.skip || die "Build not found, deploy to QA first"
 fi
 
 #==========================================================
