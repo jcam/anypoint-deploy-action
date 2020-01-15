@@ -52,7 +52,6 @@ fi
 # Deploy to runtime fabric
 # 
 mvn_deploy_cmd="mvn -B -s/m2_settings.xml deploy -DmuleDeploy -DskipTests -Drevision=$API_VERSION-R$GIT_SHORTSHA"
-mvn_deploy_cmd+=" -Ddeployment.skipVerification=true"
 mvn_deploy_cmd+=" -Dmule.env=$ENVIRONMENT"
 mvn_deploy_cmd+=" -Ddeployment.environment=$ANYPOINT_ENVIRONMENT"
 mvn_deploy_cmd+=" -Ddeployment.target=$TARGET_FABRIC"
@@ -68,5 +67,7 @@ fi
 
 if [[ "$ANYPOINT_ENVIRONMENT" = "Production" ]]; then
     mvn_deploy_cmd+=" -Ddeployment.replicas=2"
+else
+    mvn_deploy_cmd+=" -Ddeployment.skipVerification=true"
 fi
 eval $mvn_deploy_cmd
